@@ -20,7 +20,7 @@ public:
         }
         for(int ind=1;ind<=n-1;ind++){
            for(int t=0;t<=amount;t++){
-            long long nottake=dp[ind-1][t];
+        long long nottake=dp[ind-1][t];
         long long take=0;
         if(coins[ind]<=t)
         take=dp[ind][t-coins[ind]];
