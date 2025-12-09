@@ -16,6 +16,7 @@ public:
             vector<vector<int>> temp(M,vector<int> (N,0));
             for (int i = 0; i < m; i++) {
                 for (int j = 0; j < n; j++) {
+                     if (dp[i][j] == 0) continue;
                     for (vector<int> dir : directions) {
                         int x = i + dir[0];
                         int y = j + dir[1];
