@@ -1,32 +1,37 @@
 class Solution {
+    int n,m;
+    vector<pair<int,int>> directions={{1,-1},{1,0},{1,1}};
+    vector<vector<int>> dp;
+  int solve(int i,int j,vector<vector<int>>& matrix){
+    int result=INT_MAX;
+    if(j<0 || j>=m) return INT_MAX;
+    if(i==0){
+       return matrix[0][j];
+    }
+    if (dp[i][j] != INT_MAX)   
+            return dp[i][j];
+        for(auto dir:directions){
+            int new_r=i-dir.first;
+            int new_c=j-dir.second;
+
+             int prev = solve(new_r, new_c, matrix);
+
+            if (prev != INT_MAX) {
+              
+                result = min(result, matrix[i][j] + prev);
+            }
+        }
+        return dp[i][j]=result;
+    }
 public:
     int minFallingPathSum(vector<vector<int>>& matrix) {
-        int n = matrix.size();
-        int m = matrix[0].size();
-        vector<int> prev(n, 0), cur(n, 0);
-        for (int j = 0; j < m; j++)
-            prev[j] = matrix[0][j];
-        for (int i = 1; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                int up = matrix[i][j] + prev[j];
-                int ld = matrix[i][j];
-                if (j - 1 >= 0)
-                    ld += prev[j - 1];
-                else
-                    ld += 1e9;
-                int rd = matrix[i][j];
-                if (j + 1 < m)
-                    rd += prev[j + 1];
-                else
-                    rd += 1e9;
-                cur[j] = min(up, min(ld, rd));
-            }
-            prev=cur;
+         n=matrix.size();
+         m=matrix[0].size();
+         dp.assign(n, vector<int>(m, INT_MAX));
+       int ans = INT_MAX;
+        for (int j = 0; j < m; j++) {
+            ans = min(ans, solve(n - 1, j, matrix));
         }
-        int mini=1e9;
-        for(int j=0;j<m;j++){
-            mini=min(mini,prev[j]);
-        }
-        return mini;
+        return ans;
     }
 };
