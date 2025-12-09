@@ -1,27 +1,34 @@
 class Solution {
 public:
-   int M;
+    int M;
     int N;
-    int MOD=1e9+7;
-    vector<vector<int>> directions{{0,1},{0,-1},{1,0},{-1,0}};
-     int  solve(int startRow,int startColumn,int maxMove,vector<vector<vector<int>>> &dp){
-        if(startRow<0 || startRow>=M || startColumn<0 || startColumn>=N) return 1;
-        if(maxMove<=0){
-            return 0;
-        }
-        if(dp[startRow][startColumn][maxMove]!=-1) return dp[startRow][startColumn][maxMove];
-        int result=0;
-        for(vector<int> dir:directions){
-            int new_row=startRow+dir[0];
-            int new_col=startColumn+dir[1];
-            result=(result+solve(new_row,new_col,maxMove-1,dp))%MOD;
-        }
-        return  dp[startRow][startColumn][maxMove]=result;
-    }
+    int MOD = 1e9 + 7;
+    vector<vector<int>> directions{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
     int findPaths(int m, int n, int maxMove, int startRow, int startColumn) {
-         M=m;
-        N=n;
-        vector<vector<vector<int>>> dp(M+1,vector<vector<int>> (N+1,vector<int> (maxMove+1,-1)));
-        return solve(startRow,startColumn,maxMove,dp);
-    }
-};
+        M = m;
+        N = n;
+        vector<vector<int>> dp(
+            M , vector<int>(N ,  0));
+        dp[startRow][startColumn]=1;
+        int result=0;
+        for (int k = 1; k <= maxMove; k++) {
+            vector<vector<int>> temp(M,vector<int> (N,0));
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    for (vector<int> dir : directions) {
+                        int x = i + dir[0];
+                        int y = j + dir[1];
+                        if (x < 0 || x >= M || y < 0 || y >= N) {
+                            result = (dp[i][j] + result) % MOD;
+                        } else {
+                            temp[x][y] = (temp[x][y] + dp[i][j]) % MOD;
+                        }
+                    }
+                }
+            }
+            dp=temp;
+        }
+            return result;
+        }
+    };
