@@ -11,17 +11,31 @@
  */
 class Solution {
 public:
-unordered_map<TreeNode*, int> dp;
+    struct State {
+        int notRob; // max money if this node is NOT robbed
+        int rob;    // max money if this node IS robbed
+    };
+
+    State dfs(TreeNode* root) {
+        if (root == NULL) return {0, 0};
+
+        State left = dfs(root->left);
+        State right = dfs(root->right);
+
+        State cur;
+
+        // If we rob current node, we cannot rob children
+        cur.rob = root->val + left.notRob + right.notRob;
+
+        // If we do NOT rob current node, we choose best of children
+        cur.notRob = max(left.notRob, left.rob)
+                   + max(right.notRob, right.rob);
+
+        return cur;
+    }
+
     int rob(TreeNode* root) {
-       if(root==NULL) return 0;
-       if(dp.count(root)) return dp[root];
-       int val=0;
-       if(root->left!=NULL){
-        val+=rob(root->left->left)+rob(root->left->right);
-       } 
-          if(root->right!=NULL){
-        val+=rob(root->right->left)+rob(root->right->right);
-       } 
-       return dp[root]=max(val+root->val,rob(root->left)+rob(root->right));
+        State res = dfs(root);
+        return max(res.notRob, res.rob);
     }
 };
