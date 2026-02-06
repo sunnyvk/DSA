@@ -1,11 +1,9 @@
 class Solution {
 public:
-    // -------- KMP LPS computation --------
     void computeLPS(string pattern, vector<int>& lps) {
-        int M = pattern.size();
+        int M = pattern.length();
         int len = 0;
         lps[0] = 0;
-
         int i = 1;
         while (i < M) {
             if (pattern[i] == pattern[len]) {
@@ -22,56 +20,50 @@ public:
             }
         }
     }
-
-    // -------- KMP search: returns 0-based indices --------
-    vector<int> search(string pat, string txt) {
-        int N = txt.size();
-        int M = pat.size();
-
-        vector<int> lps(M);
-        computeLPS(pat, lps);
-
+    vector<int> KMP(string pat, string txt) {
+        int N = txt.length();
+        int M = pat.length();
         vector<int> result;
-        int i = 0, j = 0;
-
+        vector<int> lps(M, 0);
+        computeLPS(pat, lps);
+        int i = 0;
+        int j = 0;
         while (i < N) {
             if (txt[i] == pat[j]) {
                 i++;
                 j++;
             }
-
             if (j == M) {
-                result.push_back(i - j); // 0-based index
+                result.push_back(i - j);
                 j = lps[j - 1];
-            } 
-            else if (i < N && txt[i] != pat[j]) {
-                if (j != 0)
+            } else if (i < N && txt[i] != pat[j]) {
+                if (j != 0) {
                     j = lps[j - 1];
-                else
+                } else {
                     i++;
+                }
             }
         }
         return result;
     }
-
-    // -------- Main function --------
     vector<int> beautifulIndices(string s, string a, string b, int k) {
-        vector<int> first  = search(a, s); // indices of a
-        vector<int> second = search(b, s); // indices of b
-  vector<int> ans;
-        int j = 0;
+        vector<int> result;
+        int n = s.length();
 
-        for (int i = 0; i < first.size(); i++) {
-            // move j so that B[j] is close to A[i]
-            while (j < second.size() && second[j] < first[i] - k) {
-                j++;
-            }
+        vector<int> i_indices = KMP(a, s);
+        vector<int> j_indices = KMP(b, s);
+        for (int& i : i_indices) {
 
-            // check if this B[j] is within range
-            if (j < second.size() && abs(first[i] - second[j]) <= k) {
-                ans.push_back(first[i]);
+            int left_limit = max(0, i - k);
+            int right_limit = min(n - 1, i + k);
+
+            auto it = lower_bound(begin(j_indices), end(j_indices), left_limit);
+
+            if (it != j_indices.end() && *it <= right_limit) {
+                result.push_back(i);
             }
         }
-        return ans;
+
+        return result;
     }
 };
