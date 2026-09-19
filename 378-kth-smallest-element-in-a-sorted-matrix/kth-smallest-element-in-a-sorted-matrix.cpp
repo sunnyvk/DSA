@@ -1,14 +1,17 @@
-class Solution { // 28 ms, faster than 83.06%
+class Solution {
 public:
-    int kthSmallest(vector<vector<int>> &matrix, int k) {
-        int m = matrix.size(), n = matrix[0].size(); // For general, the matrix need not be a square
-        priority_queue<int> maxHeap;
-        for (int r = 0; r < m; ++r) {
-            for (int c = 0; c < n; ++c) {
-                maxHeap.push(matrix[r][c]);
-                if (maxHeap.size() > k) maxHeap.pop();
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+           priority_queue<int,vector<int>> pq;
+           int n=matrix.size();
+           int m=matrix[0].size();
+           for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                pq.push(matrix[i][j]);
+                if(pq.size()>k){
+                    pq.pop();
+                }
             }
-        }
-        return maxHeap.top();
+           }
+           return pq.top();
     }
 };
