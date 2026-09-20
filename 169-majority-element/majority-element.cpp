@@ -1,14 +1,14 @@
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
+        int n = nums.size();
         int ans=0;
-        int n=nums.size();
-        unordered_map<int,int> mpp;
-        for(auto it:nums){
-            mpp[it]++;
+        unordered_map<int, int> mp;
+        for (auto i : nums) {
+            mp[i]++;
         }
-        for(auto it:mpp){
-            if(it.second>n/2){
+        for (auto it : mp) {
+            if (it.second > n / 2) {
                 ans=it.first;
             }
         }
