@@ -1,19 +1,16 @@
 class Solution {
 public:
     int minimumPartition(string s, int k) {
-        long long res = 0, n = 0;
-        for (int i = 0; i < s.length(); i++) {
-             n = n * 10 + s[i] - '0';
-            if (n > k) {
-                res++;
-                n = s[i] - '0';
+        int i=0,j=0,count=0;
+        while(j<s.length()){
+            while(j<s.length() && stol(s.substr(i,j-i+1))<=k){
+                j++;
             }
-            if (n > k) {
-                return -1;
-            }
+            count++;
+            if(i==j) return -1;
+            i=j;
         }
-        return res+1;
-    }
+        return count;
 
-}
-;
+    }
+};
