@@ -1,28 +1,30 @@
 class Solution {
 public:
-int dp[1001][1001];
-int solve(vector<vector<int>>& grid, int prevr, int c){
-     int n = grid.size();
-        int m = grid[0].size();
-        if(c == m-1){
-            return 0;
-        }
-         if(dp[prevr][c]!=-1) return dp[prevr][c];
-        int maxi=0;
-        for(int i=-1;i<=1;i++){
-            int r=prevr+i;
-            if(r<n && r>=0 && c<m-1 && grid[r][c+1]>grid[prevr][c]){
-                maxi=max(maxi,1+solve(grid,r,c+1));
-            }
-        }
-        return dp[prevr][c]=maxi;
+int solve(vector<vector<int>>& grid,int row,int col, int n,int m, vector<vector<int>>& dp){
+    if(row<0 || row>n ||col >m) return 0;
+    if(dp[row][col]!=-1) return dp[row][col];
+    int updig=0,right=0,downdig=0;
+    if(row-1>=0 && col+1<m && grid[row-1][col+1]>grid[row][col]){
+        updig=1+solve(grid,row-1,col+1,n,m,dp);
+    }
+      if(col+1<m && grid[row][col+1]>grid[row][col]){
+        right=1+solve(grid,row,col+1,n,m,dp);
+    }
+      if(row+1<n && col+1<m && grid[row+1][col+1]>grid[row][col]){
+        downdig=1+solve(grid,row+1,col+1,n,m,dp);
+    }
+    return dp[row][col]=max(updig,max(right,downdig));
+
 }
     int maxMoves(vector<vector<int>>& grid) {
-          int maxi=0;
-          memset(dp, -1, sizeof(dp));
-        for(int i=0; i<grid.size(); i++){
-            maxi = max(maxi, solve(grid, i, 0));
-        }
-        return maxi;
+        int n=grid.size();
+        int m=grid[0].size();
+        int ans=0;
+        vector<vector<int>> dp(n, vector<int>(m, -1));
+        for(int i=0;i<n;i++){
+            int res=solve(grid,i,0,n,m,dp);
+            ans=max(ans,res);
+        } 
+        return ans;  
     }
 };
