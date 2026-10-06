@@ -6,7 +6,7 @@ public:
        for(int i=0;i<n;i++){
             string best ="";
             for(int len=1;len<=arr[i].size();len++){
-                for(int start=0;start<arr[i].size();start++){
+                for(int start=0;start+len<=arr[i].size();start++){
                     string sub=arr[i].substr(start,len);
                       bool found=false;
                     for(int j=0;j<n;j++){ 
