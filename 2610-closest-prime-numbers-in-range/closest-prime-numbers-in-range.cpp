@@ -4,10 +4,10 @@ public:
         vector<bool> sieve(right + 1, true);
         sieve[0] = sieve[1] = false;
         for (int i = 2; i * i <= right; i++) {
+            if(sieve[i]){
             for (int j = i * i; j <= right; j += i) {
-                if (sieve[j]) {
                     sieve[j] = false;
-                }
+            }
             }
         }
         vector<int> primes;
