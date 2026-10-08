@@ -11,28 +11,21 @@
  */
 class Solution {
 public:
-int MOD=1e9 + 7;
-long SUM=0;
-long maxP=0;
-int totalSum(TreeNode* root){
-    if(root==NULL)
-    return 0;
-    int leftSubtreeSum=totalSum(root->left);
-    int rightSubtreeSum=totalSum(root->right);
-    long  subtreeSum=root->val+leftSubtreeSum+rightSubtreeSum;
-
-    long remainingSubtreeSum=SUM-subtreeSum;
-    maxP=max(maxP,subtreeSum*remainingSubtreeSum);
-    return subtreeSum;
+int MOD=1e9+7;
+int SUM=0;
+long long maxP=0;
+long long totalSum(TreeNode* root){
+    if(root==NULL) return 0;
+    int leftsum=totalSum(root->left);
+     long long rightsum=totalSum(root->right);
+     long long subtreeSum=root->val+leftsum+rightsum;
+     long long  remainingSum=SUM-subtreeSum;
+     maxP=max(maxP,subtreeSum*remainingSum);
+     return subtreeSum;
 }
     int maxProduct(TreeNode* root) {
-        if(root==NULL){
-            return 0;
-        } 
-        maxP=0;
-        SUM=totalSum(root);
-        totalSum(root);
-        return maxP%MOD;
-
+       SUM=totalSum(root);
+       totalSum(root);
+       return maxP%MOD;
     }
 };
